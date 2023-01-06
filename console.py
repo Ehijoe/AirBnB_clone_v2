@@ -12,6 +12,26 @@ from models.amenity import Amenity
 from models.review import Review
 
 
+def add_param(param_dict, param):
+    """Parse and add a parameter to an object."""
+    parts = param.split("=")
+    if len(parts) < 2:
+        return
+    key = parts[0]
+    value = "=".join(parts[1:])
+    if value[0] == "\"" and value[-1] == "\"":
+        value = value[1:-1].replace("_", " ").replace("\\\"", '"')
+    else:
+        try:
+            value = int(value)
+        except ValueError:
+            try:
+                value = float(value)
+            except ValueError:
+                return
+    param_dict[key] = value
+
+
 class HBNBCommand(cmd.Cmd):
     """Contains the functionality for the HBNB console."""
 
@@ -113,16 +133,20 @@ class HBNBCommand(cmd.Cmd):
         """Override the emptyline method of CMD."""
         pass
 
-    def do_create(self, args):
+    def do_create(self, line):
         """Create an object of any class."""
-        if not args:
+        args = line.split()
+        if len(args) == 0:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
-        storage.save()
+        param_dict = {}
+        for param in args[1:]:
+            add_param(param_dict, param)
+        param_dict["id"] = None
+        new_instance = HBNBCommand.classes[args[0]](**param_dict)
         print(new_instance.id)
         storage.save()
 
