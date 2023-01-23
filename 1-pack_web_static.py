@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Deploy the hbnb static site."""
 import datetime
-from fabric.api import local
+from fabric.operations import local
 
 
 def do_pack():
@@ -9,6 +9,7 @@ def do_pack():
     time = datetime.datetime.now()
     time = time.strftime("%Y%m%d%H%M%S")
     archive_name = f"web_static_{time}.tgz"
+    local("mkdir versions")
     res = local(f"tar -cvzf versions/{archive_name} web_static")
     if res.failed:
         return None
