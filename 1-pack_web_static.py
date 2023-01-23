@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Deploy the hbnb static site."""
 import datetime
-from fabric.api import local
 
 
 def do_pack():
