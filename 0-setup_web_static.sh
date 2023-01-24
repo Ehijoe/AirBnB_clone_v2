@@ -18,6 +18,8 @@ echo "<!DOCTYPE html><html><body>Hello</body></html>" > /data/web_static/release
 # Create link from test to current
 ln -fs -T /data/web_static/releases/test /data/web_static/current
 
+sudo chown -hR ubuntu:ubuntu /data/
+
 config="
 server {
 	   listen 80 default_server;
